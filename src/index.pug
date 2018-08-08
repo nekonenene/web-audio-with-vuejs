@@ -25,13 +25,13 @@ html(lang="ja")
     //- My Stylesheets
     link(rel="stylesheet" href="./style/top.css")
   body.bg-light
-    main#app(role="main")
+    main(role="main")
       section.jumbotron.text-center
         .container
           h1.jumbotron-heading #{title}
           p.lead.text-muted
             | ようこそ！
-      .container
+      .container#app
         .row
           .col-md-12
             button.btn.btn-raised.btn-primary(type="button" v-on:click="playOSC(440.0, 'sine')") {{ playBtnTxt }} sine
