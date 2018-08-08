@@ -34,10 +34,10 @@ html(lang="ja")
       .container
         .row
           .col-md-12
-            button.btn.btn-raised.btn-primary(type="button") あお
-            button.btn.btn-raised.bg-green.text-white(type="button") みどり
-            button.btn.btn-raised.bg-yellow(type="button") きいろ
-            button.btn.btn-raised.btn-danger(type="button") あか
+            button.btn.btn-raised.btn-primary(type="button" v-on:click="playOSC(440.0, 'sine')") {{ playBtnTxt }} sine
+            button.btn.btn-raised.bg-green.text-white(type="button" v-on:click="playOSC(440, 'square')") {{ playBtnTxt }} square
+            button.btn.btn-raised.bg-yellow(type="button" v-on:click="playOSC(440, 'triangle')") {{ playBtnTxt }} triangle
+            button.btn.btn-raised.btn-danger(type="button" v-on:click="playOSC(440, 'sawtooth')") {{ playBtnTxt }} sawtooth
         .row
           .col-md-12
             p
