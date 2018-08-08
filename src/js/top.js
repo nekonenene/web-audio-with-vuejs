@@ -30,8 +30,9 @@ const vm = new Vue({
       dotSize: 18,
     },
     audioContext: null,
-    oscNode: null,
-    playBtnTxt: "Play",
+    oscMain: null,
+    gainMain: null,
+    playBtnTxt: 'Play',
   },
   created: function () {
     this.audioContext = getAudioContext();
@@ -39,31 +40,31 @@ const vm = new Vue({
   watch: {
     value1: function (val) {
       // console.log(val);
-      this.playOSC(440.0);
+      this.changeVolume(val);
     },
-    oscNode: function () {
-      if (this.oscNode == null) {
-        this.playBtnTxt = "Play";
+    oscMain: function () {
+      if (this.oscMain == null) {
+        this.playBtnTxt = 'Play';
       } else {
-        this.playBtnTxt = "Stop";
+        this.playBtnTxt = 'Stop';
       }
     },
   },
   computed: {
-    xxx: function () {
+    currentVolume: function () {
       // console.log(this.value1);
-      return `value1: ${this.value1}`
+      return `Volume: ${this.value1}`
     },
   },
   methods: {
-    playOSC: function (freq = 440.0, type = "sine") {
-      if (this.oscNode != null) {
-        this.oscNode.stop();
-        this.oscNode = null;
+    playOSC: function (freq = 440.0, type = "sine", with_gain = false) {
+      if (this.oscMain != null) {
+        this.oscMain.stop();
+        this.oscMain = null;
         return;
       }
 
-      this.oscNode = this.audioContext.createOscillator();
+      this.oscMain = this.audioContext.createOscillator();
 
       /**
        * 波形:
@@ -72,13 +73,34 @@ const vm = new Vue({
        *  "sawtooth":鋸歯状波
        *  "triangle":三角波
        */
-      this.oscNode.type = type;
+      this.oscMain.type = type;
       // オシレーターの周波数を決定
-      this.oscNode.frequency.value = freq;
-      // オシレーターを最終出力に接続
-      this.oscNode.connect(this.audioContext.destination);
+      this.oscMain.frequency.value = freq;
+
+      if (with_gain) {
+        this.gainMain = this.gainMain || this.audioContext.createGain();
+        this.gainMain.gain.value = this.value1 / 100.0;
+
+        // オシレーターをゲインにつなぎ、ゲインを最終出力に接続
+        this.oscMain.connect(this.gainMain);
+        this.gainMain.connect(this.audioContext.destination);
+      } else {
+        // オシレーターを最終出力に直接接続
+        this.oscMain.connect(this.audioContext.destination);
+      }
       // オシレーター動作
-      this.oscNode.start();
+      this.oscMain.start();
+    },
+    changeVolume: function (vol) {
+      if (this.oscMain == null) return;
+      this.oscMain.disconnect();
+
+      this.gainMain = this.gainMain || this.audioContext.createGain();
+      this.gainMain.gain.value = vol / 100.0;
+
+      // オシレーターをゲインにつなぎ、ゲインを最終出力に接続
+      this.oscMain.connect(this.gainMain);
+      this.gainMain.connect(this.audioContext.destination);
     },
   },
 });

@@ -42,10 +42,10 @@ html(lang="ja")
           .col-md-12
             p
               .output
-              | {{ xxx }}
+              | {{ currentVolume }}
         .row
           .col-md-3
-            | スライダー1
+            | ボリューム
           .col-md-9
             vue-slider(ref="slider" v-model="value1" :height="opts.height" :dot-size="opts.dotSize")
         .row
