@@ -1,6 +1,8 @@
-# Web Dev Template with Webpack
+# Web Audio API with Vue.js
 
-https://github.com/nekonenene/web-dev-template を、gulpからwebpackに乗り換えることで刷新した
+ほとんどはじめての Vue.js
+
+Web Audio API: https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API
 
 ## Node.js version
 
