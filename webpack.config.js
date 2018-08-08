@@ -51,7 +51,7 @@ const sassLoader = [
       ident: 'postcss',
       plugins: [
         autoprefixer(),
-        cssnano(),
+        // cssnano(),
       ],
     },
   },
@@ -120,6 +120,12 @@ const config = {
     host: 'localhost',
     port: 8013,
     watchContentBase: true,
+  },
+
+  resolve: {
+    alias: {
+      vue: 'vue/dist/vue.js',
+    },
   },
 };
 

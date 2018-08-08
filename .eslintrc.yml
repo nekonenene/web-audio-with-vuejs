@@ -11,3 +11,4 @@ env:
 rules:
   no-console: off
   quotes: ["warn", "single", { "allowTemplateLiterals": true }]
+  no-unused-vars: warn

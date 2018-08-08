@@ -24,10 +24,8 @@ html(lang="ja")
 
     //- My Stylesheets
     link(rel="stylesheet" href="./style/top.css")
-    //- My Scripts
-    script(src="./js/top.js")
   body.bg-light
-    main(role="main")
+    main#app(role="main")
       section.jumbotron.text-center
         .container
           h1.jumbotron-heading #{title}
@@ -40,11 +38,17 @@ html(lang="ja")
             button.btn.btn-raised.bg-green.text-white(type="button") みどり
             button.btn.btn-raised.bg-yellow(type="button") きいろ
             button.btn.btn-raised.btn-danger(type="button") あか
+        .row
+          .col-md-12
+            p
+              .output
+        .row
+          .col-md-3
+            | スライダー1
+          .col-md-9
+            vue-slider(ref="slider" v-model="value" :height="opts.height" :dot-size="opts.dotSize")
 
-        p
-          .output
-
-    footer.container.text-right
+    footer.container.text-right.mt-5
       a(href="http://hato-neko.x0.com" target="_blank" title="ハトネコエセンター").
         ハトネコエ
       | &nbsp;
@@ -57,5 +61,6 @@ html(lang="ja")
       script(src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous")
       script(src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous")
       <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
-    </body>
-  </html>
+
+      //- My Scripts
+      script(src="./js/top.js")
