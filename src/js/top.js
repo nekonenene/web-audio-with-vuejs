@@ -12,15 +12,22 @@ const vm = new Vue({
     'vue-slider': VueSlider,
   },
   data: {
-    value: 20,
+    value1: 20,
+    value2: 40,
     opts: {
       height: 16,
       dotSize: 18,
     },
   },
   watch: {
-    value: function (val) {
-      console.log(val);
+    value1: function (val) {
+      // console.log(val);
+    },
+  },
+  computed: {
+    xxx: function () {
+      // console.log(this.value1);
+      return `value1: ${this.value1}`
     },
   },
   methods: {

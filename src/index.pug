@@ -42,11 +42,17 @@ html(lang="ja")
           .col-md-12
             p
               .output
+              | {{ xxx }}
         .row
           .col-md-3
             | スライダー1
           .col-md-9
-            vue-slider(ref="slider" v-model="value" :height="opts.height" :dot-size="opts.dotSize")
+            vue-slider(ref="slider" v-model="value1" :height="opts.height" :dot-size="opts.dotSize")
+        .row
+          .col-md-3
+            | スライダー2
+          .col-md-9
+            vue-slider(ref="slider" v-model="value2" :height="opts.height" :dot-size="opts.dotSize")
 
     footer.container.text-right.mt-5
       a(href="http://hato-neko.x0.com" target="_blank" title="ハトネコエセンター").
