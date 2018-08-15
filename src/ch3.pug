@@ -87,6 +87,27 @@ html(lang="ja")
                 vue-slider(ref="slider" v-model="osc2.freq" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="430.0" :max="450.0" :interval="0.1")
         .row.mt-5
           .col-md-3
+            .form-group
+              label.bmd-label-floating Master Filter
+              select.form-control(v-model="masterFilter.type" v-on:change="reflectNodesSettings()")
+                option(value="allpass") allpass
+                option(value="lowpass") lowpass
+                option(value="highpass") highpass
+                option(value="bandpass") bandpass
+                option(value="notch") notch
+          .col-md-9
+            .row
+              .col-md-2
+                | freq
+              .col-md-10
+                vue-slider(ref="slider" v-model="masterFilter.freq" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="masterFilter.obj.frequency.minValue" :max="8000" :interval="0.01")
+            .row
+              .col-md-2
+                | Q
+              .col-md-10
+                vue-slider(ref="slider" v-model="masterFilter.q" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="0.01" :max="20" :interval="0.01")
+        .row.mt-3
+          .col-md-3
             | Master Volume
           .col-md-9
             vue-slider(ref="slider" v-model="masterGain.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize")

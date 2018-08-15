@@ -33,7 +33,12 @@ const vm = new Vue({
       obj: null,
       volume: 50,
     },
-    masterFilter: null,
+    masterFilter: {
+      obj: null,
+      type: 'lowpass',
+      freq: 8000,
+      q: 1,
+    },
     masterGain: {
       obj: null,
       volume: 80,
@@ -77,7 +82,7 @@ const vm = new Vue({
       this.osc1.obj = this.audioContext.createOscillator();
       this.osc2.obj = this.audioContext.createOscillator();
 
-      this.masterFilter = this.audioContext.createBiquadFilter();
+      this.masterFilter.obj = this.audioContext.createBiquadFilter();
 
       this.gain1.obj = this.audioContext.createGain();
       this.gain2.obj = this.audioContext.createGain();
@@ -88,14 +93,14 @@ const vm = new Vue({
     connectNodes: function() {
       // OSC1 -> Gain1 -> MasterFilter
       this.osc1.obj.connect(this.gain1.obj);
-      this.gain1.obj.connect(this.masterGain.obj);
+      this.gain1.obj.connect(this.masterFilter.obj);
 
       // OSC2 -> Gain2 -> MasterFilter
       this.osc2.obj.connect(this.gain2.obj);
-      this.gain2.obj.connect(this.masterGain.obj);
+      this.gain2.obj.connect(this.masterFilter.obj);
 
       // MasterFilter -> MasterGain -> MasterPanner -> Output
-      // this.masterFilter.connect(this.masterGain.obj);
+      this.masterFilter.obj.connect(this.masterGain.obj);
       this.masterGain.obj.connect(this.masterPanner.obj);
       this.masterPanner.obj.connect(this.audioContext.destination);
     },
@@ -118,6 +123,10 @@ const vm = new Vue({
       this.gain1.obj.gain.value = this.gain1.volume / 100.0;
       this.gain2.obj.gain.value = this.gain2.volume / 100.0;
       this.masterGain.obj.gain.value = this.masterGain.volume / 100.0;
+
+      this.masterFilter.obj.type = this.masterFilter.type;
+      this.masterFilter.obj.frequency.value = this.masterFilter.freq;
+      this.masterFilter.obj.Q.value = this.masterFilter.q;
 
       this.masterPanner.obj.pan.value = this.masterPanner.pan / 100.0;
     },
