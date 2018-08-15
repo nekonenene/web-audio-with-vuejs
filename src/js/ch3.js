@@ -49,16 +49,16 @@ const vm = new Vue({
     },
     isPlaying: false,
   },
-  created: function () {
-    this.createAudioContext();
-    this.createNodes();
-  },
-  watch: {
-  },
   computed: {
     currentVolume: function () {
       return `Master Volume: ${this.masterGain.volume}`;
     },
+  },
+  watch: {
+  },
+  created: function () {
+    this.createAudioContext();
+    this.createNodes();
   },
   methods: {
     getNewAudioContext: function () {
@@ -90,11 +90,11 @@ const vm = new Vue({
 
       this.masterPanner.obj = this.audioContext.createStereoPanner();
     },
-    connectNodes: function() {
+    connectNodes: function () {
       // OSC1 -> Gain1 -> MasterFilter
       this.osc1.obj
         .connect(this.gain1.obj)
-        .connect(this.masterFilter.obj)
+        .connect(this.masterFilter.obj);
 
       // OSC2 -> Gain2 -> MasterFilter
       this.osc2.obj

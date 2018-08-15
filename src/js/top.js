@@ -34,8 +34,11 @@ const vm = new Vue({
     gainMain: null,
     playBtnTxt: 'Play',
   },
-  created: function () {
-    this.audioContext = getAudioContext();
+  computed: {
+    currentVolume: function () {
+      // console.log(this.value1);
+      return `Volume: ${this.value1}`;
+    },
   },
   watch: {
     value1: function (val) {
@@ -50,14 +53,11 @@ const vm = new Vue({
       }
     },
   },
-  computed: {
-    currentVolume: function () {
-      // console.log(this.value1);
-      return `Volume: ${this.value1}`
-    },
+  created: function () {
+    this.audioContext = getAudioContext();
   },
   methods: {
-    playOSC: function (freq = 440.0, type = "sine", with_gain = false) {
+    playOSC: function (freq = 440.0, type = "sine", withGain = false) {
       if (this.oscMain != null) {
         this.oscMain.stop();
         this.oscMain = null;
@@ -77,7 +77,7 @@ const vm = new Vue({
       // オシレーターの周波数を決定
       this.oscMain.frequency.value = freq;
 
-      if (with_gain) {
+      if (withGain) {
         this.gainMain = this.gainMain || this.audioContext.createGain();
         this.gainMain.gain.value = this.value1 / 100.0;
 
