@@ -24,4 +24,4 @@ lint:
 
 .PHONY: lint-fix
 lint-fix:
-	npm run eslint --fix
+	npm run eslint:fix
