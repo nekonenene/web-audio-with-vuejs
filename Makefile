@@ -10,10 +10,12 @@ run:
 
 .PHONY: build
 build:
+	rm -rf ./dist
 	npm run build:prod
 
 .PHONY: build-dev
 build-dev:
+	rm -rf ./dist
 	npm run build:dev
 
 .PHONY: lint
