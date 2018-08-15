@@ -38,7 +38,10 @@ const vm = new Vue({
       obj: null,
       volume: 80,
     },
-    masterPanner: null,
+    masterPanner: {
+      obj: null,
+      pan: 0,
+    },
     isPlaying: false,
   },
   created: function () {
@@ -80,7 +83,7 @@ const vm = new Vue({
       this.gain2.obj = this.audioContext.createGain();
       this.masterGain.obj = this.audioContext.createGain();
 
-      this.masterPanner = this.audioContext.createStereoPanner();
+      this.masterPanner.obj = this.audioContext.createStereoPanner();
     },
     connectNodes: function() {
       // OSC1 -> Gain1 -> MasterFilter
@@ -93,8 +96,8 @@ const vm = new Vue({
 
       // MasterFilter -> MasterGain -> MasterPanner -> Output
       // this.masterFilter.connect(this.masterGain.obj);
-      this.masterGain.obj.connect(this.masterPanner);
-      this.masterPanner.connect(this.audioContext.destination);
+      this.masterGain.obj.connect(this.masterPanner.obj);
+      this.masterPanner.obj.connect(this.audioContext.destination);
     },
     reflectNodesSettings: function () {
       /**
@@ -115,6 +118,8 @@ const vm = new Vue({
       this.gain1.obj.gain.value = this.gain1.volume / 100.0;
       this.gain2.obj.gain.value = this.gain2.volume / 100.0;
       this.masterGain.obj.gain.value = this.masterGain.volume / 100.0;
+
+      this.masterPanner.obj.pan.value = this.masterPanner.pan / 100.0;
     },
     playOSC: function () {
       if (this.isPlaying) {

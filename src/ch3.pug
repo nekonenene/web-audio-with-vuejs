@@ -90,6 +90,11 @@ html(lang="ja")
             | Master Volume
           .col-md-9
             vue-slider(ref="slider" v-model="masterGain.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize")
+        .row.mt-2
+          .col-md-3
+            | Panpot
+          .col-md-9
+            vue-slider(ref="slider" v-model="masterPanner.pan" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :min="-100" :max="100")
 
     footer.container.text-right.mt-5
       a(href="http://hato-neko.x0.com" target="_blank" title="ハトネコエセンター").
