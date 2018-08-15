@@ -45,7 +45,16 @@ html(lang="ja")
                 option(value="triangle") tri
                 option(value="sawtooth") saw
           .col-md-9
-            vue-slider(ref="slider" v-model="gain1.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize")
+            .row
+              .col-md-2
+                | vol
+              .col-md-10
+                vue-slider(ref="slider" v-model="gain1.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'")
+            .row
+              .col-md-2
+                | detune
+              .col-md-10
+                vue-slider(ref="slider" v-model="osc1.detune" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="-100" :max="100")
           .col-md-3
             .form-group
               label.bmd-label-floating OSC 2
@@ -55,7 +64,16 @@ html(lang="ja")
                 option(value="triangle") tri
                 option(value="sawtooth") saw
           .col-md-9
-            vue-slider(ref="slider" v-model="gain2.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize")
+            .row
+              .col-md-2
+                | vol
+              .col-md-10
+                vue-slider(ref="slider" v-model="gain2.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'")
+            .row
+              .col-md-2
+                | detune
+              .col-md-10
+                vue-slider(ref="slider" v-model="osc2.detune" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="-100" :max="100")
         .row
           .col-md-3
             | Master Volume

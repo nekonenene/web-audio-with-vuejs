@@ -17,11 +17,13 @@ const vm = new Vue({
       obj: null,
       type: 'square',
       freq: 440,
+      detune: 0,
     },
     osc2: {
       obj: null,
       type: 'sine',
       freq: 440,
+      detune: 0,
     },
     gain1: {
       obj: null,
@@ -41,6 +43,7 @@ const vm = new Vue({
   },
   created: function () {
     this.createAudioContext();
+    this.createNodes();
   },
   watch: {
   },
@@ -102,9 +105,11 @@ const vm = new Vue({
        *  "triangle":三角波
        */
       this.osc1.obj.type = this.osc1.type;
+      this.osc1.obj.detune.value = this.osc1.detune;
       this.osc1.obj.frequency.value = this.osc1.freq;
 
       this.osc2.obj.type = this.osc2.type;
+      this.osc2.obj.detune.value = this.osc2.detune;
       this.osc2.obj.frequency.value = this.osc2.freq;
 
       this.gain1.obj.gain.value = this.gain1.volume / 100.0;
