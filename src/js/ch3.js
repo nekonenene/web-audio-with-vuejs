@@ -23,8 +23,6 @@ const vm = new Vue({
       type: 'sine',
       freq: 440,
     },
-    filter1: null,
-    filter2: null,
     gain1: {
       obj: null,
       volume: 50,
@@ -73,8 +71,6 @@ const vm = new Vue({
       this.osc1.obj = this.audioContext.createOscillator();
       this.osc2.obj = this.audioContext.createOscillator();
 
-      this.filter1 = this.audioContext.createBiquadFilter();
-      this.filter2 = this.audioContext.createBiquadFilter();
       this.masterFilter = this.audioContext.createBiquadFilter();
 
       this.gain1.obj = this.audioContext.createGain();
@@ -84,14 +80,12 @@ const vm = new Vue({
       this.masterPanner = this.audioContext.createStereoPanner();
     },
     connectNodes: function() {
-      // OSC1 -> Filter1 -> Gain1 -> MasterFilter
+      // OSC1 -> Gain1 -> MasterFilter
       this.osc1.obj.connect(this.gain1.obj);
-      // this.filter1.connect(this.gain1.obj);
       this.gain1.obj.connect(this.masterGain.obj);
 
-      // OSC2 -> Filter2 -> Gain2 -> MasterFilter
+      // OSC2 -> Gain2 -> MasterFilter
       this.osc2.obj.connect(this.gain2.obj);
-      // this.filter2.connect(this.gain2.obj);
       this.gain2.obj.connect(this.masterGain.obj);
 
       // MasterFilter -> MasterGain -> MasterPanner -> Output
