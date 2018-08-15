@@ -92,17 +92,20 @@ const vm = new Vue({
     },
     connectNodes: function() {
       // OSC1 -> Gain1 -> MasterFilter
-      this.osc1.obj.connect(this.gain1.obj);
-      this.gain1.obj.connect(this.masterFilter.obj);
+      this.osc1.obj
+        .connect(this.gain1.obj)
+        .connect(this.masterFilter.obj)
 
       // OSC2 -> Gain2 -> MasterFilter
-      this.osc2.obj.connect(this.gain2.obj);
-      this.gain2.obj.connect(this.masterFilter.obj);
+      this.osc2.obj
+        .connect(this.gain2.obj)
+        .connect(this.masterFilter.obj);
 
       // MasterFilter -> MasterGain -> MasterPanner -> Output
-      this.masterFilter.obj.connect(this.masterGain.obj);
-      this.masterGain.obj.connect(this.masterPanner.obj);
-      this.masterPanner.obj.connect(this.audioContext.destination);
+      this.masterFilter.obj
+        .connect(this.masterGain.obj)
+        .connect(this.masterPanner.obj)
+        .connect(this.audioContext.destination);
     },
     reflectNodesSettings: function () {
       /**
