@@ -28,8 +28,11 @@ const vm = new Vue({
     gainMain: null,
     playBtnTxt: 'Play',
   },
-  created: function () {
-    this.audioContext = getAudioContext();
+  computed: {
+    currentVolume: function () {
+      // console.log(this.volume);
+      return `Volume: ${this.volume}`;
+    },
   },
   watch: {
     volume: function (val) {
@@ -43,11 +46,8 @@ const vm = new Vue({
       }
     },
   },
-  computed: {
-    currentVolume: function () {
-      // console.log(this.volume);
-      return `Volume: ${this.volume}`
-    },
+  created: function () {
+    this.audioContext = getAudioContext();
   },
   methods: {
     playOSC: function (freq = 440.0, type = "sine", with_gain = false) {

@@ -21,3 +21,7 @@ build-dev:
 .PHONY: lint
 lint:
 	npm run eslint
+
+.PHONY: lint-fix
+lint-fix:
+	npm run eslint --fix

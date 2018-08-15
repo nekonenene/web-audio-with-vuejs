@@ -26,9 +26,6 @@ const vm = new Vue({
     oscMain: null,
     playBtnTxt: 'Play',
   },
-  created: function () {
-    this.audioContext = getAudioContext();
-  },
   watch: {
     value1: function (val) {
       // console.log(val);
@@ -41,6 +38,9 @@ const vm = new Vue({
         this.playBtnTxt = 'Stop';
       }
     },
+  },
+  created: function () {
+    this.audioContext = getAudioContext();
   },
   methods: {
     playOSC: function (freq = 440.0, type = "sine", with_gain = false) {

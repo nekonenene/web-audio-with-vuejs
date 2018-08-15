@@ -57,7 +57,7 @@ const vm = new Vue({
     this.audioContext = getAudioContext();
   },
   methods: {
-    playOSC: function (freq = 440.0, type = "sine", withGain = false) {
+    playOSC: function (freq = 440.0, type = 'sine', withGain = false) {
       if (this.oscMain != null) {
         this.oscMain.stop();
         this.oscMain = null;
