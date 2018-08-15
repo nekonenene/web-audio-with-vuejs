@@ -36,15 +36,31 @@ html(lang="ja")
           .col-md-12
             button.btn.btn-raised.btn-primary(type="button" v-on:click="playOSC()") {{ isPlaying ? "Stop sound" : "Play sound" }}
         .row
-          .col-md-12
-            p
-              .output
-              | {{ currentVolume }}
+          .col-md-3
+            .form-group
+              label.bmd-label-floating OSC 1
+              select.form-control(v-model="osc1.type" v-on:change="reflectNodesSettings()")
+                option(value="sine") sine
+                option(value="square") square
+                option(value="triangle") tri
+                option(value="sawtooth") saw
+          .col-md-9
+            vue-slider(ref="slider" v-model="gain1.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize")
+          .col-md-3
+            .form-group
+              label.bmd-label-floating OSC 2
+              select.form-control(v-model="osc2.type" v-on:change="reflectNodesSettings()")
+                option(value="sine") sine
+                option(value="square") square
+                option(value="triangle") tri
+                option(value="sawtooth") saw
+          .col-md-9
+            vue-slider(ref="slider" v-model="gain2.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize")
         .row
           .col-md-3
-            | ボリューム
+            | Master Volume
           .col-md-9
-            vue-slider(ref="slider" v-model="masterVolume" :height="opts.height" :dot-size="opts.dotSize")
+            vue-slider(ref="slider" v-model="masterGain.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize")
 
     footer.container.text-right.mt-5
       a(href="http://hato-neko.x0.com" target="_blank" title="ハトネコエセンター").

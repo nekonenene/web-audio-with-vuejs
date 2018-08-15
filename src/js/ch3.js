@@ -15,20 +15,29 @@ const vm = new Vue({
     audioContext: null,
     osc1: {
       obj: null,
-      type: 'triangle',
+      type: 'square',
       freq: 440,
     },
     osc2: {
       obj: null,
       type: 'sine',
-      freq: 448,
+      freq: 440,
     },
     filter1: null,
     filter2: null,
-    gain1: null,
-    gain2: null,
+    gain1: {
+      obj: null,
+      volume: 50,
+    },
+    gain2: {
+      obj: null,
+      volume: 50,
+    },
     masterFilter: null,
-    masterGain: null,
+    masterGain: {
+      obj: null,
+      volume: 80,
+    },
     masterPanner: null,
     isPlaying: false,
   },
@@ -36,21 +45,15 @@ const vm = new Vue({
     this.createAudioContext();
   },
   watch: {
-    masterVolume: function (val) {
-      this.setMasterVolume(val);
-    },
   },
   computed: {
     currentVolume: function () {
-      // console.log(this.masterVolume);
-      return `Master Volume: ${this.masterVolume}`;
+      return `Master Volume: ${this.masterGain.volume}`;
     },
   },
   methods: {
     getNewAudioContext: function () {
       try {
-        // Fix up for prefixing
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
         return new AudioContext();
       } catch (e) {
         alert('Sorry, Web Audio API is not supported in this browser');
@@ -74,26 +77,26 @@ const vm = new Vue({
       this.filter2 = this.audioContext.createBiquadFilter();
       this.masterFilter = this.audioContext.createBiquadFilter();
 
-      this.gain1 = this.audioContext.createGain();
-      this.gain2 = this.audioContext.createGain();
-      this.masterGain = this.audioContext.createGain();
+      this.gain1.obj = this.audioContext.createGain();
+      this.gain2.obj = this.audioContext.createGain();
+      this.masterGain.obj = this.audioContext.createGain();
 
       this.masterPanner = this.audioContext.createStereoPanner();
     },
     connectNodes: function() {
       // OSC1 -> Filter1 -> Gain1 -> MasterFilter
-      this.osc1.obj.connect(this.filter1);
-      this.filter1.connect(this.gain1);
-      this.gain1.connect(this.masterFilter);
+      this.osc1.obj.connect(this.gain1.obj);
+      // this.filter1.connect(this.gain1.obj);
+      this.gain1.obj.connect(this.masterGain.obj);
 
       // OSC2 -> Filter2 -> Gain2 -> MasterFilter
-      this.osc2.obj.connect(this.filter2);
-      this.filter2.connect(this.gain2);
-      this.gain2.connect(this.masterFilter);
+      this.osc2.obj.connect(this.gain2.obj);
+      // this.filter2.connect(this.gain2.obj);
+      this.gain2.obj.connect(this.masterGain.obj);
 
       // MasterFilter -> MasterGain -> MasterPanner -> Output
-      this.masterFilter.connect(this.masterGain);
-      this.masterGain.connect(this.masterPanner);
+      // this.masterFilter.connect(this.masterGain.obj);
+      this.masterGain.obj.connect(this.masterPanner);
       this.masterPanner.connect(this.audioContext.destination);
     },
     reflectNodesSettings: function () {
@@ -109,8 +112,12 @@ const vm = new Vue({
 
       this.osc2.obj.type = this.osc2.type;
       this.osc2.obj.frequency.value = this.osc2.freq;
+
+      this.gain1.obj.gain.value = this.gain1.volume / 100.0;
+      this.gain2.obj.gain.value = this.gain2.volume / 100.0;
+      this.masterGain.obj.gain.value = this.masterGain.volume / 100.0;
     },
-    playOSC: function (freq = 440.0, type = "sine", with_gain = false) {
+    playOSC: function () {
       if (this.isPlaying) {
         this.isPlaying = false;
         // オシレーター動作
@@ -124,10 +131,6 @@ const vm = new Vue({
         this.osc1.obj.start();
         this.osc2.obj.start();
       }
-    },
-    setMasterVolume: function (vol) {
-      this.masterGain = this.masterGain || this.audioContext.createGain();
-      this.masterGain.gain.value = vol / 100.0;
     },
   },
 });
