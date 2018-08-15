@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import VueSlider from 'vue-slider-component';
+import VcoModule from './vco-module.vue';
 
 const vm = new Vue({
   el: '#app',
   components: {
     'vue-slider': VueSlider,
+    'vco-module': VcoModule,
   },
   data: {
     masterVolume: 60,
@@ -13,6 +15,7 @@ const vm = new Vue({
       dotSize: 18,
     },
     audioContext: null,
+    vco1: null,
     osc1: {
       obj: null,
       type: 'square',
@@ -59,6 +62,9 @@ const vm = new Vue({
   created: function () {
     this.createAudioContext();
     this.createNodes();
+  },
+  mounted: function () {
+    this.vco1 = this.$refs.vco1;
   },
   methods: {
     getNewAudioContext: function () {
@@ -134,14 +140,15 @@ const vm = new Vue({
       this.masterPanner.obj.pan.value = this.masterPanner.pan / 100.0;
     },
     playOSC: function () {
+      this.setupNodes();
+      this.vco1.playOSC();
+
       if (this.isPlaying) {
         this.isPlaying = false;
         // オシレーター動作
         this.osc1.obj.stop();
         this.osc2.obj.stop();
       } else {
-        this.setupNodes();
-
         this.isPlaying = true;
         // オシレーター動作
         this.osc1.obj.start();
