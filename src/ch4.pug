@@ -14,7 +14,7 @@ html(lang="ja")
     meta(name="theme-color" content="#2b0de8")
     link(rel="icon" href="./img/favicon_192.png" sizes="192x192")
 
-    - var title = "Chapter 3";
+    - var title = "Chapter 4";
     title #{title}
 
     // Normalize.css
@@ -30,12 +30,14 @@ html(lang="ja")
         .container
           h1.jumbotron-heading #{title}
           p.lead.text-muted
-            | 2 OSC のシンセらしく
+            | Component を使いエレガントに
       .container#app
         .row
           .col-md-12
             button.btn.btn-raised.btn-primary(type="button" v-on:click="playOSC()") {{ isPlaying ? "Stop sound" : "Play sound" }}
         .row
+          vco-module(ref="vco1" :initial-volume="80" :initial-waveform="'square'")
+        .row.mt-4
           .col-md-3
             .form-group
               label.bmd-label-floating OSC 1
@@ -49,17 +51,17 @@ html(lang="ja")
               .col-md-2
                 | vol
               .col-md-10
-                vue-slider(ref="slider" v-model="gain1.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'")
+                vue-slider(v-model="gain1.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'")
             .row
               .col-md-2
                 | detune
               .col-md-10
-                vue-slider(ref="slider" v-model="osc1.detune" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="-100" :max="100")
+                vue-slider(v-model="osc1.detune" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="-100" :max="100")
             //-.row
               .col-md-2
                 | freq
               .col-md-10
-                vue-slider(ref="slider" v-model="osc1.freq" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="430.0" :max="450.0" :interval="0.1")
+                vue-slider(v-model="osc1.freq" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="430.0" :max="450.0" :interval="0.1")
         .row.mt-4
           .col-md-3
             .form-group
@@ -74,17 +76,17 @@ html(lang="ja")
               .col-md-2
                 | vol
               .col-md-10
-                vue-slider(ref="slider" v-model="gain2.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'")
+                vue-slider(v-model="gain2.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'")
             .row
               .col-md-2
                 | detune
               .col-md-10
-                vue-slider(ref="slider" v-model="osc2.detune" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="-100" :max="100")
+                vue-slider(v-model="osc2.detune" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="-100" :max="100")
             //-.row
               .col-md-2
                 | freq
               .col-md-10
-                vue-slider(ref="slider" v-model="osc2.freq" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="430.0" :max="450.0" :interval="0.1")
+                vue-slider(v-model="osc2.freq" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="430.0" :max="450.0" :interval="0.1")
         .row.mt-5
           .col-md-3
             .form-group
@@ -100,22 +102,22 @@ html(lang="ja")
               .col-md-2
                 | freq
               .col-md-10
-                vue-slider(ref="slider" v-model="masterFilter.freq" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="masterFilter.obj.frequency.minValue" :max="8000" :interval="0.01")
+                vue-slider(v-model="masterFilter.freq" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="masterFilter.obj.frequency.minValue" :max="8000" :interval="0.01")
             .row
               .col-md-2
                 | Q
               .col-md-10
-                vue-slider(ref="slider" v-model="masterFilter.q" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="0.01" :max="20" :interval="0.01")
+                vue-slider(v-model="masterFilter.q" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="0.01" :max="20" :interval="0.01")
         .row.mt-3
           .col-md-3
             | Master Volume
           .col-md-9
-            vue-slider(ref="slider" v-model="masterGain.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize")
+            vue-slider(v-model="masterGain.volume" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize")
         .row.mt-2
           .col-md-3
             | Panpot
           .col-md-9
-            vue-slider(ref="slider" v-model="masterPanner.pan" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :min="-100" :max="100")
+            vue-slider(v-model="masterPanner.pan" @callback="reflectNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :min="-100" :max="100")
 
     footer.container.text-right.mt-5
       a(href="http://hato-neko.x0.com" target="_blank" title="ハトネコエセンター").
@@ -132,4 +134,4 @@ html(lang="ja")
       <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 
       //- My Scripts
-      script(src="./js/ch3.js")
+      script(src="./js/ch4.js")
