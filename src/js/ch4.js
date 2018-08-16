@@ -16,26 +16,7 @@ const vm = new Vue({
     },
     audioContext: null,
     vco1: null,
-    osc1: {
-      obj: null,
-      type: 'square',
-      freq: 440,
-      detune: 0,
-    },
-    osc2: {
-      obj: null,
-      type: 'sine',
-      freq: 440,
-      detune: 0,
-    },
-    gain1: {
-      obj: null,
-      volume: 50,
-    },
-    gain2: {
-      obj: null,
-      volume: 50,
-    },
+    vco2: null,
     masterFilter: {
       obj: null,
       type: 'lowpass',
@@ -61,12 +42,10 @@ const vm = new Vue({
   },
   created: function () {
     this.createAudioContext();
-    this.createNodes();
+    this.setupNodes();
   },
   mounted: function () {
-    this.vco1 = this.$refs.vco1; // mounted でおこなうのがポイント
-    console.log(this.vco1);
-    this.$refs.vco1.setupNodes(this.audioContext, this.audioContext.destination);
+    this.setupChildComponents();
   },
   methods: {
     getNewAudioContext: function () {
@@ -83,56 +62,21 @@ const vm = new Vue({
     setupNodes: function () {
       this.createNodes();
       this.connectNodes();
-      this.reflectNodesSettings();
+      this.loadNodesSettings();
     },
     createNodes: function () {
-      // stop させると再度 start できないので、基本的に毎回作り直す
-      this.osc1.obj = this.audioContext.createOscillator();
-      this.osc2.obj = this.audioContext.createOscillator();
-
       this.masterFilter.obj = this.audioContext.createBiquadFilter();
-
-      this.gain1.obj = this.audioContext.createGain();
-      this.gain2.obj = this.audioContext.createGain();
       this.masterGain.obj = this.audioContext.createGain();
-
       this.masterPanner.obj = this.audioContext.createStereoPanner();
     },
     connectNodes: function () {
-      // OSC1 -> Gain1 -> MasterFilter
-      this.osc1.obj
-        .connect(this.gain1.obj)
-        .connect(this.masterFilter.obj);
-
-      // OSC2 -> Gain2 -> MasterFilter
-      this.osc2.obj
-        .connect(this.gain2.obj)
-        .connect(this.masterFilter.obj);
-
       // MasterFilter -> MasterGain -> MasterPanner -> Output
       this.masterFilter.obj
         .connect(this.masterGain.obj)
         .connect(this.masterPanner.obj)
         .connect(this.audioContext.destination);
     },
-    reflectNodesSettings: function () {
-      /**
-       * 波形:
-       *  "sine" : サイン波
-       *  "square" : 矩形波
-       *  "sawtooth":鋸歯状波
-       *  "triangle":三角波
-       */
-      this.osc1.obj.type = this.osc1.type;
-      this.osc1.obj.detune.value = this.osc1.detune;
-      this.osc1.obj.frequency.value = this.osc1.freq;
-
-      this.osc2.obj.type = this.osc2.type;
-      this.osc2.obj.detune.value = this.osc2.detune;
-      this.osc2.obj.frequency.value = this.osc2.freq;
-
-      this.gain1.obj.gain.value = this.gain1.volume / 100.0;
-      this.gain2.obj.gain.value = this.gain2.volume / 100.0;
+    loadNodesSettings: function () {
       this.masterGain.obj.gain.value = this.masterGain.volume / 100.0;
 
       this.masterFilter.obj.type = this.masterFilter.type;
@@ -141,23 +85,17 @@ const vm = new Vue({
 
       this.masterPanner.obj.pan.value = this.masterPanner.pan / 100.0;
     },
+    setupChildComponents: function () {
+      // refs を取得するために、 mounted 内でおこなうのがポイント
+      this.vco1 = this.$refs.vco1;
+      this.vco2 = this.$refs.vco2;
+      this.vco1.setupNodes(this.audioContext, this.masterFilter.obj);
+      this.vco2.setupNodes(this.audioContext, this.masterFilter.obj);
+    },
     playOSC: function () {
+      this.isPlaying = !this.isPlaying;
       this.vco1.playOrStop();
-
-      if (this.isPlaying) {
-        // オシレーター動作
-        this.osc1.obj.stop();
-        this.osc2.obj.stop();
-
-        this.isPlaying = false;
-      } else {
-        this.setupNodes();
-        // オシレーター動作
-        this.osc1.obj.start();
-        this.osc2.obj.start();
-
-        this.isPlaying = true;
-      }
+      this.vco2.playOrStop();
     },
   },
 });
