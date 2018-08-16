@@ -31,10 +31,6 @@ export default {
     'vue-slider': VueSlider,
   },
   props: {
-    audioContext: {
-      type: AudioContext,
-      default: null,
-    },
     initialWaveform: {
       type: String,
       default: 'sine',
@@ -42,10 +38,6 @@ export default {
     initialVolume: {
       type: Number,
       default: 50,
-    },
-    destination: {
-      type: AudioDestinationNode,
-      default: null,
     },
     sliderHeight: {
       type: Number,
@@ -62,7 +54,10 @@ export default {
   },
   data () {
     return {
+      audioContext: null,
+      destination: null,
       oscNode: null,
+      switchGainNode: null,
       gainNode: null,
       waveform: this.initialWaveform,
       detune: 0,
@@ -73,44 +68,65 @@ export default {
         dotSize: this.sliderDotSize,
         tipPosition: this.sliderTipPosition,
       },
+      doneSetup: false,
       isPlaying: false,
     };
   },
+  watch: {
+    isPlaying: function (val) {
+      if (!this.doneSetup) return;
+
+      if (val) {
+        this.switchGainNode.gain.value = 1.0;
+      } else {
+        this.switchGainNode.gain.value = 0.0;
+      };
+    },
+  },
   created: function () {
-    this.createNodes();
   },
   methods: {
-    setupNodes: function () {
-      this.createNodes();
-      this.connectNodes();
-      this.loadNodesSettings();
+    setupNodes: function (audioContext = this.audioContext, destination = this.destination) {
+      this.audioContext = audioContext;
+      this.destination = destination;
+
+      this.createNodes(audioContext);
+      this.connectNodes(destination);
+      this.doneSetup = true;
     },
-    createNodes: function () {
-      this.oscNode = this.audioContext.createOscillator();
-      this.gainNode = this.audioContext.createGain();
+    createNodes: function (audioContext = this.audioContext) {
+      this.oscNode = audioContext.createOscillator();
+      this.oscNode.start();
+
+      this.switchGainNode = audioContext.createGain();
+      this.switchGainNode.gain.value = 0.0;
+
+      this.gainNode = audioContext.createGain();
     },
-    connectNodes: function () {
-      // OSC -> Gain -> Dest
+    connectNodes: function (destination = this.destination) {
       this.oscNode
+        .connect(this.switchGainNode)
         .connect(this.gainNode)
-        .connect(this.destination);
+        .connect(destination);
     },
     loadNodesSettings: function () {
+      if (!this.doneSetup) return;
+
       this.oscNode.type = this.waveform;
       this.oscNode.detune.value = this.detune;
       this.oscNode.frequency.value = this.freq;
 
       this.gainNode.gain.value = this.volume / 100.0;
     },
-    playOSC: function () {
-      if (this.isPlaying) {
-        this.oscNode.stop();
+    playOrStop: function () {
+      if (!this.doneSetup) return;
 
+      if (this.isPlaying) {
+        this.switchGainNode.gain.value = 0.0;
         this.isPlaying = false;
       } else {
-        this.setupNodes();
-        this.oscNode.start();
-
+        this.loadNodesSettings();
+        this.switchGainNode.gain.value = 1.0;
         this.isPlaying = true;
       }
     },

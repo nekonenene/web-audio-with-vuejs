@@ -64,7 +64,9 @@ const vm = new Vue({
     this.createNodes();
   },
   mounted: function () {
-    this.vco1 = this.$refs.vco1;
+    this.vco1 = this.$refs.vco1; // mounted でおこなうのがポイント
+    console.log(this.vco1);
+    this.$refs.vco1.setupNodes(this.audioContext, this.audioContext.destination);
   },
   methods: {
     getNewAudioContext: function () {
@@ -140,19 +142,21 @@ const vm = new Vue({
       this.masterPanner.obj.pan.value = this.masterPanner.pan / 100.0;
     },
     playOSC: function () {
-      this.setupNodes();
-      this.vco1.playOSC();
+      this.vco1.playOrStop();
 
       if (this.isPlaying) {
-        this.isPlaying = false;
         // オシレーター動作
         this.osc1.obj.stop();
         this.osc2.obj.stop();
+
+        this.isPlaying = false;
       } else {
-        this.isPlaying = true;
+        this.setupNodes();
         // オシレーター動作
         this.osc1.obj.start();
         this.osc2.obj.start();
+
+        this.isPlaying = true;
       }
     },
   },

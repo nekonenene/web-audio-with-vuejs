@@ -36,7 +36,7 @@ html(lang="ja")
           .col-md-12
             button.btn.btn-raised.btn-primary(type="button" v-on:click="playOSC()") {{ isPlaying ? "Stop sound" : "Play sound" }}
         .row
-          vco-module(ref="vco1" :audioContext="audioContext" :initial-waveform="square" :destination="audioContext.destination")
+          vco-module(ref="vco1" :initial-volume="80" :initial-waveform="'square'")
         .row.mt-4
           .col-md-3
             .form-group
