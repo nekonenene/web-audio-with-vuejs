@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import VueSlider from 'vue-slider-component';
 import VcoModule from './vco-module.vue';
+import VcfModule from './vcf-module.vue';
 
 const vm = new Vue({
   el: '#app',
   components: {
     'vue-slider': VueSlider,
     'vco-module': VcoModule,
+    'vcf-module': VcfModule,
   },
   data: {
     masterVolume: 60,
@@ -17,12 +19,7 @@ const vm = new Vue({
     audioContext: null,
     vco1: null,
     vco2: null,
-    masterFilter: {
-      obj: null,
-      type: 'lowpass',
-      freq: 8000,
-      q: 1,
-    },
+    masterFilter: null,
     masterGain: {
       obj: null,
       volume: 80,
@@ -65,32 +62,28 @@ const vm = new Vue({
       this.loadNodesSettings();
     },
     createNodes: function () {
-      this.masterFilter.obj = this.audioContext.createBiquadFilter();
       this.masterGain.obj = this.audioContext.createGain();
       this.masterPanner.obj = this.audioContext.createStereoPanner();
     },
     connectNodes: function () {
       // MasterFilter -> MasterGain -> MasterPanner -> Output
-      this.masterFilter.obj
-        .connect(this.masterGain.obj)
+      this.masterGain.obj
         .connect(this.masterPanner.obj)
         .connect(this.audioContext.destination);
     },
     loadNodesSettings: function () {
       this.masterGain.obj.gain.value = this.masterGain.volume / 100.0;
-
-      this.masterFilter.obj.type = this.masterFilter.type;
-      this.masterFilter.obj.frequency.value = this.masterFilter.freq;
-      this.masterFilter.obj.Q.value = this.masterFilter.q;
-
       this.masterPanner.obj.pan.value = this.masterPanner.pan / 100.0;
     },
     setupChildComponents: function () {
       // refs を取得するために、 mounted 内でおこなうのがポイント
       this.vco1 = this.$refs.vco1;
       this.vco2 = this.$refs.vco2;
-      this.vco1.setupNodes(this.audioContext, this.masterFilter.obj);
-      this.vco2.setupNodes(this.audioContext, this.masterFilter.obj);
+      this.masterFilter = this.$refs.masterFilter;
+
+      this.masterFilter.setup(this.audioContext, this.masterGain.obj);
+      this.vco1.setup(this.audioContext, this.masterFilter.filterNode);
+      this.vco2.setup(this.audioContext, this.masterFilter.filterNode);
     },
     playOSC: function () {
       this.isPlaying = !this.isPlaying;

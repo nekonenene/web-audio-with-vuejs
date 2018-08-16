@@ -40,26 +40,7 @@ html(lang="ja")
         .row.mt-4
           vco-module(ref="vco2" :initial-volume="50" :initial-waveform="'sine'")
         .row.mt-5
-          .col-md-3
-            .form-group
-              label.bmd-label-floating Master Filter
-              select.form-control(v-model="masterFilter.type" v-on:change="loadNodesSettings()")
-                option(value="allpass") allpass
-                option(value="lowpass") lowpass
-                option(value="highpass") highpass
-                option(value="bandpass") bandpass
-                option(value="notch") notch
-          .col-md-9
-            .row
-              .col-md-2
-                | freq
-              .col-md-10
-                vue-slider(v-model="masterFilter.freq" @callback="loadNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="masterFilter.obj.frequency.minValue" :max="8000" :interval="0.01")
-            .row
-              .col-md-2
-                | Q
-              .col-md-10
-                vue-slider(v-model="masterFilter.q" @callback="loadNodesSettings()" :height="opts.height" :dot-size="opts.dotSize" :tooltip-dir="'right'" :min="0.01" :max="20" :interval="0.01")
+          vcf-module(ref="masterFilter" :initial-filter-type="'lowpass'")
         .row.mt-3
           .col-md-3
             | Master Volume

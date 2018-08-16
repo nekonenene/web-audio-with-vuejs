@@ -72,27 +72,18 @@ export default {
       isPlaying: false,
     };
   },
-  watch: {
-    isPlaying: function (val) {
-      if (!this.doneSetup) return;
-
-      if (val) {
-        this.switchGainNode.gain.value = 1.0;
-      } else {
-        this.switchGainNode.gain.value = 0.0;
-      };
-    },
-  },
   created: function () {
   },
   methods: {
-    setupNodes: function (audioContext = this.audioContext, destination = this.destination) {
+    setup: function (audioContext = this.audioContext, destination = this.destination) {
       this.audioContext = audioContext;
       this.destination = destination;
 
       this.createNodes(audioContext);
       this.connectNodes(destination);
       this.doneSetup = true;
+
+      this.loadNodesSettings();
     },
     createNodes: function (audioContext = this.audioContext) {
       this.oscNode = audioContext.createOscillator();
@@ -121,14 +112,8 @@ export default {
     playOrStop: function () {
       if (!this.doneSetup) return;
 
-      if (this.isPlaying) {
-        this.switchGainNode.gain.value = 0.0;
-        this.isPlaying = false;
-      } else {
-        this.loadNodesSettings();
-        this.switchGainNode.gain.value = 1.0;
-        this.isPlaying = true;
-      }
+      this.switchGainNode.gain.value = this.isPlaying ? 0.0 : 1.0;
+      this.isPlaying = !this.isPlaying;
     },
   },
 };
