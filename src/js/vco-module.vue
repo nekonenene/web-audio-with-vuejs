@@ -72,6 +72,11 @@ export default {
       isPlaying: false,
     };
   },
+  watch: {
+    freq: function () {
+      this.loadNodesSettings();
+    },
+  },
   created: function () {
   },
   methods: {
