@@ -31,10 +31,12 @@ html(lang="ja")
           h1.jumbotron-heading #{title}
           p.lead.text-muted
             | ADSR を付けました
+          p.lead.text-muted.small
+            | （※Google Chrome で動かすことを推奨します。Firefox だと Release が機能しません）
       .container#app
         .row
           .col-md-12
-            button.btn.btn-raised.btn-primary(type="button" @click="switchCanPlay()") {{ canPlay ? "OSC ON" : "OSC OFF" }}
+            button.btn.btn-raised(type="button" @click="switchCanPlay()" :class="canPlay ? 'bg-green text-white' : 'btn-danger'") {{ canPlay ? "OSC ON" : "OSC OFF" }}
         .row
           vco-module(ref="vco1" :initial-volume="50" :initial-waveform="'square'")
         .row.mt-4

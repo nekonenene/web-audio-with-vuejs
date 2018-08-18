@@ -1,26 +1,26 @@
 <template lang="pug">
 .container
   .row
-    .col-md-6
+    .col-md-6.pr-4
       .row
         .col-md-3
           | attack
         .col-md-9
           vue-slider(v-model="attack" :height="sliderOpts.height" :dot-size="sliderOpts.dotSize" :tooltip-dir="sliderOpts.tipPosition" :max="maxAttack" :interval="0.01")
-    .col-md-6
+    .col-md-6.pr-4
       .row
         .col-md-3
           | decay
         .col-md-9
           vue-slider(v-model="decay" :height="sliderOpts.height" :dot-size="sliderOpts.dotSize" :tooltip-dir="sliderOpts.tipPosition" :max="maxDecay" :interval="0.01")
   .row
-    .col-md-6
+    .col-md-6.pr-4
       .row
         .col-md-3
           | sustain
         .col-md-9
           vue-slider(v-model="sustain" :height="sliderOpts.height" :dot-size="sliderOpts.dotSize" :tooltip-dir="sliderOpts.tipPosition" :max="maxSustain" :interval="0.01")
-    .col-md-6
+    .col-md-6.pr-4
       .row
         .col-md-3
           | release
@@ -40,7 +40,7 @@ export default {
   props: {
     initialAttack: {
       type: Number,
-      default: 0,
+      default: 0.01,
     },
     initialDecay: {
       type: Number,
