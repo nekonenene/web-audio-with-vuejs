@@ -32,7 +32,7 @@ new Vue({
       pan: 0,
     },
     canPlay: false,
-    pushingMidiNotes: [],
+    pushingKeys: [],
   },
   computed: {
     currentVolume: function () {
@@ -40,9 +40,11 @@ new Vue({
     },
   },
   watch: {
-    pushingMidiNotes: function (val) {
+    pushingKeys: function (val) {
       if (val.length !== 0) {
-        this.changeFreqByMidiNoteNum(val[0]);
+        const midiNoteNum = this.keyCodeToMidiNote(val[0]);
+        this.changeFreqByMidiNoteNum(midiNoteNum);
+
         this.masterAdsr.whenNoteOn(this.audioContext);
       } else {
         this.masterAdsr.whenNoteOff(this.audioContext);
@@ -112,20 +114,20 @@ new Vue({
       document.onkeyup = this.whenKeyUp;
     },
     whenKeyDown: function (ev) {
-      const pushedKey = ev.key;
-      const midiNoteNum = this.keyToMidiNote(pushedKey);
+      const pushedKeyCode = ev.code;
+      const midiNoteNum = this.keyCodeToMidiNote(pushedKeyCode);
       if (midiNoteNum == null) return;
 
-      if (this.pushingMidiNotes.indexOf(midiNoteNum) === -1) {
-        this.pushingMidiNotes.unshift(midiNoteNum);
+      if (this.pushingKeys.indexOf(pushedKeyCode) === -1) {
+        this.pushingKeys.unshift(pushedKeyCode);
       }
     },
     whenKeyUp: function (ev) {
-      const pushedKey = ev.key;
-      const midiNoteNum = this.keyToMidiNote(pushedKey);
+      const pushedKeyCode = ev.code;
+      const midiNoteNum = this.keyCodeToMidiNote(pushedKeyCode);
       if (midiNoteNum == null) return;
 
-      this.pushingMidiNotes = this.pushingMidiNotes.filter(key => key !== midiNoteNum);
+      this.pushingKeys = this.pushingKeys.filter(key => key !== pushedKeyCode);
     },
     changeFreqByMidiNoteNum: function (midiNoteNum) {
       if (midiNoteNum == null) return;
@@ -138,12 +140,29 @@ new Vue({
       this.vco1.freq = freq;
       this.vco2.freq = freq;
     },
-    keyToMidiNote: function (key) {
+    keyCodeToMidiNote: function (keyCode) {
       const assignMap = {
-        z: 60, s: 61, x: 62, d: 63, c: 64, v: 65, g: 66, b: 67, h: 68, n: 69, j: 70, m: 71, ',': 72, l: 73, '.': 74, ';': 75, '/': 76, _: 77,
+        KeyZ: 60,
+        KeyS: 61,
+        KeyX: 62,
+        KeyD: 63,
+        KeyC: 64,
+        KeyV: 65,
+        KeyG: 66,
+        KeyB: 67,
+        KeyH: 68,
+        KeyN: 69,
+        KeyJ: 70,
+        KeyM: 71,
+        Comma: 72,
+        KeyL: 73,
+        Period: 74,
+        Semicolon: 75,
+        Slash: 76,
+        IntlRo: 77,
       };
 
-      return assignMap[key];
+      return assignMap[keyCode];
     },
   },
 });
