@@ -14,7 +14,7 @@ html(lang="ja")
     meta(name="theme-color" content="#2b0de8")
     link(rel="icon" href="./img/favicon_192.png" sizes="192x192")
 
-    - var title = "練習ページ";
+    - var title = "WebAudio API の実験室";
     title #{title}
 
     // Normalize.css
@@ -29,30 +29,52 @@ html(lang="ja")
       section.jumbotron.text-center
         .container
           h1.jumbotron-heading #{title}
-          p.lead.text-muted
+          //-p.lead.text-muted
             | ようこそ！
-      .container#app
+      .container
         .row
-          .col-md-12
-            button.btn.btn-raised.btn-primary(type="button" v-on:click="playOSC(440.0, 'sine')") {{ playBtnTxt }} sine
-            button.btn.btn-raised.bg-green.text-white(type="button" v-on:click="playOSC(440, 'square')") {{ playBtnTxt }} square
-            button.btn.btn-raised.bg-yellow(type="button" v-on:click="playOSC(440, 'triangle')") {{ playBtnTxt }} triangle
-            button.btn.btn-raised.btn-danger(type="button" v-on:click="playOSC(440, 'sawtooth')") {{ playBtnTxt }} sawtooth
-        .row
-          .col-md-12
-            p
-              .output
-              | {{ currentVolume }}
-        .row
-          .col-md-3
-            | ボリューム
-          .col-md-9
-            vue-slider(ref="slider" v-model="value1" :height="opts.height" :dot-size="opts.dotSize")
-        .row
-          .col-md-3
-            | スライダー2
-          .col-md-9
-            vue-slider(ref="slider" v-model="value2" :height="opts.height" :dot-size="opts.dotSize")
+          .col-md-6.col-lg-4.col-xl-3
+            .card.text-center.mb-4
+              .card-body
+                h5.card-title Chapter 1
+                h6.card-subtitle.mt-2.mb-2.text-muted まずは直接接続
+                p.card-text With supporting text below as a natural lead-in to additional content.
+                a.btn.btn-raised.btn-primary(href="./ch1.html") Let's Go!
+          .col-md-6.col-lg-4.col-xl-3
+            .card.text-center.mb-4
+              .card-body
+                h5.card-title Chapter 2
+                h6.card-subtitle.mt-2.mb-2.text-muted ゲインにつないで音量調整
+                p.card-text With supporting text below as a natural lead-in to additional content.
+                a.btn.btn-raised.btn-primary(href="./ch2.html") Let's Go!
+          .col-md-6.col-lg-4.col-xl-3
+            .card.text-center.mb-4
+              .card-body
+                h5.card-title Chapter 3
+                h6.card-subtitle.mt-2.mb-2.text-muted 2 OSC のシンセらしく
+                p.card-text With supporting text below as a natural lead-in to additional content.
+                a.btn.btn-raised.btn-primary(href="./ch3.html") Let's Go!
+          .col-md-6.col-lg-4.col-xl-3
+            .card.text-center.mb-4
+              .card-body
+                h5.card-title Chapter 4
+                h6.card-subtitle.mt-2.mb-2.text-muted Component を使いエレガントに
+                p.card-text With supporting text below as a natural lead-in to additional content.
+                a.btn.btn-raised.btn-primary(href="./ch4.html") Let's Go!
+          .col-md-6.col-lg-4.col-xl-3
+            .card.text-center.mb-4
+              .card-body
+                h5.card-title Chapter 5
+                h6.card-subtitle.mt-2.mb-2.text-muted キーボードで音階を奏でる
+                p.card-text With supporting text below as a natural lead-in to additional content.
+                a.btn.btn-raised.btn-primary(href="./ch5.html") Let's Go!
+          .col-md-6.col-lg-4.col-xl-3
+            .card.text-center.mb-4
+              .card-body
+                h5.card-title Chapter 6
+                h6.card-subtitle.mt-2.mb-2.text-muted ADSR を付けました
+                p.card-text With supporting text below as a natural lead-in to additional content.
+                a.btn.btn-raised.btn-primary(href="./ch6.html") Let's Go!
 
     footer.container.text-right.mt-5
       a(href="http://hato-neko.x0.com" target="_blank" title="ハトネコエセンター").
