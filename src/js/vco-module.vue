@@ -24,6 +24,7 @@
 
 <script>
 import VueSlider from 'vue-slider-component';
+import Const from './constants.js';
 
 export default {
   name: 'VcoModule',
@@ -95,7 +96,7 @@ export default {
       this.oscNode.start();
 
       this.switchGainNode = audioContext.createGain();
-      this.switchGainNode.gain.value = 0.0;
+      this.switchGainNode.gain.value = Const.GAIN_MIN;
 
       this.gainNode = audioContext.createGain();
     },
@@ -117,7 +118,7 @@ export default {
     playOrStop: function () {
       if (!this.doneSetup) return;
 
-      this.switchGainNode.gain.value = this.isPlaying ? 0.0 : 1.0;
+      this.switchGainNode.gain.value = this.isPlaying ? Const.GAIN_MIN : Const.GAIN_MAX;
       this.isPlaying = !this.isPlaying;
     },
   },

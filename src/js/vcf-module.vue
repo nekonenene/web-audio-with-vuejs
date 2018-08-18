@@ -15,16 +15,17 @@
         .col-md-2
           | freq
         .col-md-10
-          vue-slider(v-model="freq" @callback="loadNodesSettings()" :height="sliderOpts.height" :dot-size="sliderOpts.dotSize" :tooltip-dir="sliderOpts.tipPosition" :min="0" :max="8000" :interval="0.01")
+          vue-slider(v-model="freq" @callback="loadNodesSettings()" :height="sliderOpts.height" :dot-size="sliderOpts.dotSize" :tooltip-dir="sliderOpts.tipPosition" :min="minFreq" :max="maxFreq" :interval="0.01")
       .row
         .col-md-2
           | Q
         .col-md-10
-          vue-slider(v-model="q" @callback="loadNodesSettings()" :height="sliderOpts.height" :dot-size="sliderOpts.dotSize" :tooltip-dir="sliderOpts.tipPosition" :min="0.01" :max="20" :interval="0.01")
+          vue-slider(v-model="q" @callback="loadNodesSettings()" :height="sliderOpts.height" :dot-size="sliderOpts.dotSize" :tooltip-dir="sliderOpts.tipPosition" :min="minQ" :max="maxQ" :interval="0.01")
 </template>
 
 <script>
 import VueSlider from 'vue-slider-component';
+import Const from './constants.js';
 
 export default {
   name: 'VcfModule',
@@ -38,11 +39,27 @@ export default {
     },
     initialFreq: {
       type: Number,
-      default: 8000,
+      default: Const.FILTER_FREQ_MAX,
+    },
+    minFreq: {
+      type: Number,
+      default: Const.FILTER_FREQ_MIN,
+    },
+    maxFreq: {
+      type: Number,
+      default: Const.FILTER_FREQ_MAX,
     },
     initialQ: {
       type: Number,
       default: 1,
+    },
+    minQ: {
+      type: Number,
+      default: Const.FILTER_Q_MIN,
+    },
+    maxQ: {
+      type: Number,
+      default: Const.FILTER_Q_MAX,
     },
     sliderHeight: {
       type: Number,

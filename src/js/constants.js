@@ -8,7 +8,13 @@ export default Object.freeze({
   GAIN_MIN: 0.0,
   GAIN_MAX: 1.0,
 
-  // Filter freq としてユーザーが指定できる値
+  // Filter freq としてユーザーが指定できる最小値
   FILTER_FREQ_MIN: 0.0,
+  // Filter freq としてユーザーが指定できる最大値
   FILTER_FREQ_MAX: 8000.0,
+
+  // Filter Q としてユーザーが指定できる最小値
+  FILTER_Q_MIN: 0.01,
+  // Filter Q としてユーザーが指定できる最大値
+  FILTER_Q_MAX: 20.0,
 });
