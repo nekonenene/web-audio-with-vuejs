@@ -36,7 +36,7 @@ html(lang="ja")
       .container#app
         .row
           .col-md-6
-            button.btn.btn-raised(type="button" @click="switchCanPlay()" :class="canPlay ? 'bg-green text-white' : 'btn-danger'") {{ canPlay ? "OSC ON" : "OSC OFF" }}
+            button.btn.btn-raised(type="button" @click="switchCanPlay()" :class="canPlay ? 'bg-green text-white' : 'btn-danger'") {{ canPlay ? "Sound ON" : "Sound OFF" }}
           .col-md-6
             .pull-right
               button.btn.btn-raised.btn-info.right(type="button" data-toggle="modal" data-target="#helpModal") Help
