@@ -20,13 +20,24 @@ body {
 }
 
 p {
-  margin        : 8px 0;
+  margin-bottom : 1rem;
   font-size     : 100%;
   letter-spacing: 0.1rem;
 }
 
 button {
   margin-right: 8px;
+}
+
+.modal-body {
+  font-size: 85%;
+  ul {
+    li {
+      margin-bottom : 1rem;
+      letter-spacing: 0.1rem;
+      line-height   : 1.6rem;
+    }
+  }
 }
 
 // テキストの調整 small, big など

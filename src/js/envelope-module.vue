@@ -1,6 +1,6 @@
 <template lang="pug">
 .container
-  .row
+  .row.d-flex.align-items-center
     .col-md-6.pr-4
       .row
         .col-md-3

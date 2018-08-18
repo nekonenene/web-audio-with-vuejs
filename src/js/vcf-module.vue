@@ -1,6 +1,6 @@
 <template lang="pug">
 .container
-  .row
+  .row.d-flex.align-items-center
     .col-md-3
       .form-group
         label.bmd-label-floating Filter type
