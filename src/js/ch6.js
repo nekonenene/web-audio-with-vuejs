@@ -3,6 +3,7 @@ import VueSlider from 'vue-slider-component';
 import VcoModule from './vco-module.vue';
 import VcfModule from './vcf-module.vue';
 import AdsrModule from './envelope-module.vue';
+import Const from './constants';
 
 new Vue({
   el: '#app',
@@ -40,9 +41,10 @@ new Vue({
     },
   },
   watch: {
-    pushingKeys: function (val) {
-      if (val.length !== 0) {
-        const midiNoteNum = this.keyCodeToMidiNote(val[0]);
+    pushingKeys: function (keys) {
+      if (keys.length !== 0) {
+        const zKeyNoteNum = Const.C4_NOTE_NUM + keys[0].oct * 12;
+        const midiNoteNum = this.keyCodeToMidiNote(keys[0].keyCode, zKeyNoteNum);
         this.changeFreqByMidiNoteNum(midiNoteNum);
 
         this.masterAdsr.whenNoteOn(this.audioContext);
@@ -118,8 +120,11 @@ new Vue({
       const midiNoteNum = this.keyCodeToMidiNote(pushedKeyCode);
       if (midiNoteNum == null) return;
 
-      if (this.pushingKeys.indexOf(pushedKeyCode) === -1) {
-        this.pushingKeys.unshift(pushedKeyCode);
+      if (!this.pushingKeys.find(key => key.keyCode === pushedKeyCode)) {
+        this.pushingKeys.unshift({
+          keyCode: pushedKeyCode,
+          oct: (ev.shiftKey ? 1 : 0) + (ev.ctrlKey ? -1 : 0) + (ev.altKey ? -1 : 0),
+        });
       }
     },
     whenKeyUp: function (ev) {
@@ -127,7 +132,7 @@ new Vue({
       const midiNoteNum = this.keyCodeToMidiNote(pushedKeyCode);
       if (midiNoteNum == null) return;
 
-      this.pushingKeys = this.pushingKeys.filter(key => key !== pushedKeyCode);
+      this.pushingKeys = this.pushingKeys.filter(key => key.keyCode !== pushedKeyCode);
     },
     changeFreqByMidiNoteNum: function (midiNoteNum) {
       if (midiNoteNum == null) return;
@@ -140,29 +145,44 @@ new Vue({
       this.vco1.freq = freq;
       this.vco2.freq = freq;
     },
-    keyCodeToMidiNote: function (keyCode) {
+    changeFreqOctave: function (oct) {
+      this.vco1.freq = this.vco1.freq * (2 ** oct);
+      this.vco2.freq = this.vco2.freq * (2 ** oct);
+    },
+    /**
+     * 入力キーをMIDIノート番号に変換
+     *
+     * @param keyCode 押されたキー。 event.key から取得
+     * @param startNum Zキーに割り当てるノート番号。デフォルトは 60 (C4)
+     */
+    keyCodeToMidiNote: function (keyCode, startNum = Const.C4_NOTE_NUM) {
       const assignMap = {
-        KeyZ: 60,
-        KeyS: 61,
-        KeyX: 62,
-        KeyD: 63,
-        KeyC: 64,
-        KeyV: 65,
-        KeyG: 66,
-        KeyB: 67,
-        KeyH: 68,
-        KeyN: 69,
-        KeyJ: 70,
-        KeyM: 71,
-        Comma: 72,
-        KeyL: 73,
-        Period: 74,
-        Semicolon: 75,
-        Slash: 76,
-        IntlRo: 77,
+        KeyZ: 0,
+        KeyS: 1,
+        KeyX: 2,
+        KeyD: 3,
+        KeyC: 4,
+        KeyV: 5,
+        KeyG: 6,
+        KeyB: 7,
+        KeyH: 8,
+        KeyN: 9,
+        KeyJ: 10,
+        KeyM: 11,
+        Comma: 12,
+        KeyL: 13,
+        Period: 14,
+        Semicolon: 15,
+        Slash: 16,
+        IntlRo: 17,
       };
 
-      return assignMap[keyCode];
+      const idx = assignMap[keyCode];
+      if (idx == null) {
+        return null;
+      }
+
+      return startNum + idx;
     },
   },
 });

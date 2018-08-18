@@ -25,7 +25,7 @@
 
 <script>
 import VueSlider from 'vue-slider-component';
-import Const from './constants.js';
+import Const from './constants';
 
 export default {
   name: 'VcfModule',

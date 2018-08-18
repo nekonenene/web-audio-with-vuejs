@@ -17,4 +17,7 @@ export default Object.freeze({
   FILTER_Q_MIN: 0.01,
   // Filter Q としてユーザーが指定できる最大値
   FILTER_Q_MAX: 20.0,
+
+  // C4（真ん中のド）のMIDIノート番号
+  C4_NOTE_NUM: 60,
 });
