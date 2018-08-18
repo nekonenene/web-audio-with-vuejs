@@ -4,7 +4,7 @@ import VcoModule from './vco-module.vue';
 import VcfModule from './vcf-module.vue';
 import AdsrModule from './envelope-module.vue';
 
-const vm = new Vue({
+new Vue({
   el: '#app',
   components: {
     'vue-slider': VueSlider,

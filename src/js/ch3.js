@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueSlider from 'vue-slider-component';
 
-const vm = new Vue({
+new Vue({
   el: '#app',
   components: {
     'vue-slider': VueSlider,

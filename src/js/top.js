@@ -17,7 +17,7 @@ const getAudioContext = () => {
   }
 };
 
-const vm = new Vue({
+new Vue({
   el: '#app',
   components: {
     'vue-slider': VueSlider,
