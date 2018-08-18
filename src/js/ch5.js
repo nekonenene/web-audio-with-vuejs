@@ -29,7 +29,7 @@ const vm = new Vue({
       pan: 0,
     },
     isPlaying: false,
-    pushingKeys: [],
+    pushingMidiNotes: [],
   },
   computed: {
     currentVolume: function () {
@@ -37,6 +37,17 @@ const vm = new Vue({
     },
   },
   watch: {
+    pushingMidiNotes: function (val) {
+      if (val.length !== 0) {
+        this.changeFreqByMidiNoteNum(val[0]);
+      }
+
+      if (!this.isPlaying) {
+        this.playOSC(); // Play!
+      } else if (this.isPlaying && val.length === 0) {
+        this.playOSC(); // STOP
+      }
+    },
   },
   created: function () {
     this.createAudioContext();
@@ -100,26 +111,17 @@ const vm = new Vue({
       const pushedKey = ev.key;
       const midiNoteNum = this.keyToMidiNote(pushedKey);
       if (midiNoteNum == null) return;
-      this.changeFreqByMidiNoteNum(midiNoteNum);
 
-      if (this.pushingKeys.indexOf(pushedKey) === -1) {
-        this.pushingKeys.unshift(pushedKey);
+      if (this.pushingMidiNotes.indexOf(midiNoteNum) === -1) {
+        this.pushingMidiNotes.unshift(midiNoteNum);
       }
-
-      if (!this.isPlaying) this.playOSC(); // PLAY!
     },
     whenKeyUp: function (ev) {
       const pushedKey = ev.key;
       const midiNoteNum = this.keyToMidiNote(pushedKey);
       if (midiNoteNum == null) return;
 
-      this.pushingKeys = this.pushingKeys.filter(key => key !== pushedKey);
-
-      if (this.pushingKeys.length === 0 && this.isPlaying) {
-        this.playOSC(); // STOP
-      } else {
-        this.changeFreqByMidiNoteNum(this.keyToMidiNote(this.pushingKeys[0]));
-      }
+      this.pushingMidiNotes = this.pushingMidiNotes.filter(key => key !== midiNoteNum);
     },
     changeFreqByMidiNoteNum: function (midiNoteNum) {
       if (midiNoteNum == null) return;
