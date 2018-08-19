@@ -32,7 +32,7 @@ jobs: # a collection of steps
           command: make build
       - run:
           name: remove files and dirs which exclude `dist`
-          command: ls -a | grep -v 'dist' | xargs rm -rf
+          command: /bin/ls -A | grep -v 'dist' | xargs rm -rf
       - run:
           name: move `dist` dir to current dir
           command: mv ./dist/* ./
