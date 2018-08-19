@@ -41,6 +41,7 @@ jobs: # a collection of steps
           command: |
             git config --global user.name  "CircleCI"
             git config --global user.email "circleci@gh-pages.com"
+            git init
             git add .
             git commit -m "Publish [ci skip]"
             git checkout -B gh-pages
