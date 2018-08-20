@@ -2,6 +2,9 @@
 version: 2
 jobs: # a collection of steps
   build: # runs not using Workflows must have a `build` job as entry point
+    branches:
+      ignore:
+        - gh-pages
     working_directory: ~/repo # directory where steps will run
     docker: # run the steps with Docker
       - image: circleci/node:8 # 8系がLTSなので使用
@@ -42,6 +45,6 @@ jobs: # a collection of steps
             git config --global user.name  "CircleCI"
             git config --global user.email "circleci@gh-pages.com"
             git add .
-            git commit -m "Publish [ci skip]"
+            git commit -m "Publish gh-pages"
             git checkout -B gh-pages
             git push -u origin gh-pages --force
