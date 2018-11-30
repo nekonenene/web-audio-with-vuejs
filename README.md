@@ -5,8 +5,8 @@
 
 ## Require
 
-* Node.js: v8.11.3 (v8.x LTS)
-* npm: v6.4.0 or above
+* Node.js: v10.14.1 (v10.x LTS)
+* npm: v6.4.1 or above
 
 
 ## 開発するには……
