@@ -1,7 +1,7 @@
 {
-  "name": "template2",
+  "name": "web-audio-with-vuejs",
   "version": "0.1.0",
-  "description": "Web制作時のテンプレート",
+  "description": "Web Audio API",
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "build:dev": "webpack --mode development --config webpack.config.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:nekonenene"
+    "url": "git@github.com:nekonenene/web-audio-with-vuejs.git"
   },
   "author": "nekonenene",
   "license": "MIT",
